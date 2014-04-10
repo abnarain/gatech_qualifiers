@@ -1,0 +1,415 @@
+% Original Author: Chip Mappus (cmappus@gatech.edu)
+% Last Rev:
+
+% Example slides for yet another unofficial Georgia Tech beamer theme
+% See http://latex-beamer.sourceforge.net/ for more information on
+% beamer.
+%Use the following for text over image animation
+%http://tex.stackexchange.com/questions/119788/overlay-multiline-text-in-the-image-in-beamer
+%or use Ipe tool to make such images with text over them
+% Modified by Abhinav Narain 
+\documentclass{beamer}
+
+\mode<presentation>{\usetheme{Atlanta}}
+\usepackage{natbib}
+\usepackage{graphicx}
+%\usepackage[footnotesize]{subfigure}
+\usepackage[latin1]{inputenc}
+% uncomment for Times font
+%\usepackage{times}
+%\usepackage[T1]{fontenc}
+\usepackage[dayofweek]{datetime}
+\usepackage[numberedbib]{apacite}
+\usepackage{appendixnumberbeamer}
+\usepackage{rotating}
+\usepackage{color}
+\usepackage{tikz}
+\title[] {Deniable Liasons}
+
+\author[] 
+{Abhinav Narain, \\
+Prof. Nick Feamster,\\
+Prof. Alex Snoeren (UCSD)}
+
+\institute[PhD Qualifier Presentation]
+{College of Computing\\
+School of Computer Science\\
+ Georgia Institute of Technology}
+
+\newdate{date}{28}{04}{2014}
+\date{\displaydate{date}}
+
+\setbeamertemplate{bibliography item}[text]
+
+\begin{document}
+
+{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/logos/Georgia-Tech-Insignia-Watermark-1200x1100}}
+  \begin{frame}
+    \titlepage 
+  \end{frame}
+}
+
+\section{Motivation}
+\begin{frame}
+  \frametitle{Communication is Observable}
+  \begin{itemize} 
+  \item There is an increasing need for private communication in public places
+  \item Unfortunately, most communication is observable, even if it is confidential
+    \begin{itemize}
+      \item Phone calls
+        \item Internet traffic
+        \item Face-to-face meetings
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Deniable communication}
+    Motivating Examples 
+    \begin{itemize}
+      \item Covert message passing between activists for public protest
+      \item Whistleblower in an office environment
+      \item Message exchange by a spy and a handler in coffee shop    
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Communication in proximity is still Observable}
+    \begin{itemize}
+      \item Dead drops
+      \item Normal conversations
+      \item Physical media exchange
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Existing techniques}
+    \begin{itemize}
+    \item on Wide Area Networks
+      \begin{itemize}
+        \item Generate benign, legitimate cover traffic
+        \item Transmit the actual traffic between it
+        \item Can provide Anonymity, but not Deniability
+      \end{itemize}
+    \item on Wireless LANs
+      \begin{itemize}
+      \item Timing Covert channels
+      \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Observation}
+\begin{frame}
+  \frametitle{Wireless is Noisy}
+    \begin{itemize}
+    \item Non stationary process
+    \item Has characteristic of being truly random
+    \item \textcolor{red}{Idea} : Use inherent randomness of noisy wireless channel to
+      hide secret messages
+
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Packet Corruption in Wifi }
+    \begin{itemize}
+    \item Ubiquitous, naturally occurring phenomenon
+    \item Difficult to model
+    \item    Caused by
+    \item Interference
+      \begin{itemize}
+      \item Multipath 
+      \item Non-wifi
+      \end{itemize}
+    \item Collisions
+    \item Hidden terminals
+    \item Low signal strength
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{A New covert Channel}
+    \begin{itemize}
+    \item Wireless broadcast medium
+    \item Ubiquitous and natural phenomenon of packet corruption in Wifi 
+    \item Hide messages in corrupted frames
+    \item \textcolor{red}{Challenge} : Make message indistinguishable from
+      \textit{natural} corruption
+    \end{itemize}
+\end{frame}
+
+\section{Concept}
+\begin{frame}
+  \frametitle{Chaffing and Winnowing}
+    \begin{itemize}
+    \item \textit{Chaff} is the actual corrupted frames on the channel
+      due to packet corruption\footnotemark
+      %~\mCite{Riv98a}
+    \item \textit{Grain} is the crafted SSL frames which are
+      deliberately corrupted by the sender for the secret
+      communication
+    \end{itemize}
+    \footnotetext[1]{Rivest \textit{et. al} Chaffing and Winnowing: Confidentiality without Encryption, CryptoBytes (RSA Laboratories), volume 4, number 1 (summer 1998), 12--17. }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Environment Setting}
+  \begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{images/setting}
+  \end{figure}
+\end{frame}
+\section{Denali}
+\begin{frame}
+  \frametitle{Security Goals}
+    \begin{itemize}
+    \item \textbf{Deniable}
+      \begin{itemize}
+      \item Ability to deny the communication
+      \end{itemize}
+    \item \textbf{Anonymous}
+      \begin{itemize}
+      \item Cannot be identified specifically
+      \end{itemize}
+    \item \textbf{Confidential}
+      \begin{itemize}
+      \item Adversary cannot recover message
+      \end{itemize}
+    \item \textbf{Robustness}
+      \begin{itemize}
+    \item  Cannot be disrupted
+      \end{itemize}      
+    \end{itemize}
+\end{frame}
+
+\section{Implementation}
+\begin{frame}
+  \frametitle{Prototype Implementation}
+    \begin{itemize}
+    \item Write custom tool which runs on Alice and Bob's wireless devices
+    \item Dual wireless chips on a laptop
+      \begin{itemize}
+      \item Pre existing (AR9485), USB based (AR9170)
+      \item Modify inbuilt wireless driver so that it transmits
+        frames with incorrect FCS
+      \item USB wireless chip works functions as usual
+      \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two Modifications}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/wireless-mods}
+  \end{figure}
+\end{frame}
+
+\section{Denali}
+\begin{frame}
+  \frametitle{ Communication Channel}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/denali-tunnel}
+  \end{figure}
+  \begin{itemize}
+  \item  Sender encrypts message using recipient's public key and
+    hides message in existing SSL \textit{cover} stream
+  \item Wireless interface adds incorrect checksum to packet
+    \begin{itemize}
+    \item Access Point  discards \textit{corrupted} frames
+    \item Recipient overhears corrupted frames and can separate grain from chaff
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Embedding Secret Messages}
+    \begin{itemize}
+      \item The secret messages from the application  are encrypted using public key cryptography
+      \item Encrypted message is embedded in SSL payload of the 802.11 frame
+        \item Incorrect checksum at Layer 2 is attached to the while
+          it is transmitted in the air
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Sending a Message}
+  \begin{figure}
+    \centering
+    \includegraphics[width=.8\linewidth]{images/sender}
+  \end{figure}
+  \begin{itemize}
+  \item Hidden message sent through TUN device (fix no item)
+  \item Combined with duplicate copies of real application traffic to generate corrupted duplicates
+  \item Corrupted frames sent on second interface
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Receiving a message}
+  \begin{figure}
+    \centering
+  \includegraphics[width=.5\linewidth]{images/receiver}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Steps in Protocol}
+  \begin{figure}
+  \centering
+  \includegraphics[width=.5\textwidth]{images/protocol}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Traffic Characteristics}
+    \begin{itemize}
+    \item Packet error rates
+    \item Higher packet error rates, higher the chances of deniability
+    \item Higher the packet corruption rate, better the performance of Denali
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Corruptions in frames: Considerations}
+    \begin{itemize}
+    \item Corruption of bits occur in blocks
+      \begin{itemize}
+      \item Channel is not memoryless
+      \item Interference occurs in bursts
+      \end{itemize}
+    \item Bits further into the frame are more likely to be corrupted
+      \begin{itemize}
+      \item Lack of receiver-sender synchronization
+      \end{itemize}
+    \end{itemize}  
+\end{frame}
+
+\section{Evaluation}
+\begin{frame}
+  \frametitle{Evaluation}
+    \begin{itemize}
+    \item Present the error distribution patterns to the adversary
+      indicating two worlds 
+      \begin{itemize}
+      \item in presence of secret communication
+      \item in absence of secret communication
+      \end{itemize}
+    \item Error distributions should be indistinguishable
+      \begin{itemize}
+      \item Bit Error distribution
+      \item Packet Error distribution
+    \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quantifying Deniability}
+    \begin{itemize}
+    \item Let $f'(x)$ be the discrete probability error distribution
+      with secret communication 
+    \item Let $f(x)$  be the discrete probability error distribution without secret  communication
+    \item $\epsilon = \frac{1}{B} \cdot \Sigma |f'(x)-f(x)|$
+    \item $\epsilon$ is the bitwise L1 distance between two distributions 
+    \item $B$ is the size of the packet in bits
+    \item $\sum_{x=0}^B |f'(x)- f(x)|$ is the normalized L1 distance
+      between the distributions
+    \item The lower the $\epsilon$, the more deniable the communication
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bit Error Distribution with Denali}
+  \centering
+  \includegraphics[width=.8\textwidth]{images/500_2_diff.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Matching Bit Error Distribution}
+  \centering
+  \includegraphics[width=.8\textwidth]{images/500_2_norm.png}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Deniability vs Throughput}
+    \begin{itemize}
+    \item  As we inject more packets into the channel, the L1 distance
+      of the new distribution is going to increase from the noise
+      (assume the distribution of corrupted bits is same)
+    \item The more the throughput, the higher the chances of secret
+      messages being detected
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Deniability vs Throughput}
+  \centering
+  \includegraphics[width=.8\textwidth]{images/bw_l1_var}
+\end{frame}
+
+\section{Conclusion and Future Work}
+\begin{frame}
+  \frametitle{Conclusion and Future Work}
+  \begin{itemize}
+  \item Denali provides Deniability, Confidentiality, Robustness
+  \item Main idea: Hide messages in corrupted frames
+  \item Sender and receiver can separate \textit{chaff}
+  \item Overhead is significant, but existing traffic can provide the cover
+  \item Extending Denali to Mobile devices and Multi-hop Networks
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Thanks!}
+    \begin{itemize}
+    \item Questions
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+%\scriptsize{\bibliographystyle{acm}}
+\bibliographystyle{amsalpha}
+\bibliography{bibdb}
+\end{frame}
+
+\end{document}
+
+
+%\begin{frame}
+%  \frametitle{Percentage Retransmissions with Number of Devices }
+%  \begin{tikzpicture}
+%    \node[anchor=south west,inner sep=0] (image)
+%    at (0.0,0)
+%         {\includegraphics[width=.7\textwidth]{./images/var_retx.png}};
+%         \begin{scope}[x={(image.south east)},y={(image.north west)}]
+%           \node<2-> at (0.58,0.75) {%
+%           \begin{overlayarea}{.4\textwidth}{.2\textheight}
+%             \only<1> \ \textcolor{red}{Retransmissions are independent of number of devices}
+%             \end{overlayarea}
+%           };
+%         \end{scope}
+%  \end{tikzpicture}
+%\end{frame}
+
+% Local Variables:
+% mode: latex
+% mode: flyspell
+% mode: auto-fill
+% TeX-master: t
+% End:
+%   \begin{block}{}
+%     \begin{enumerate}
+%     \item 
+%     \end{enumerate}
+%   \end{block}
+
+%\begin{frame}
+%  \frametitle{}
+%    \begin{itemize} 
+%    \end{itemize}
+%\end{frame}
