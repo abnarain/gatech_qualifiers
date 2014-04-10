@@ -1,0 +1,11 @@
+\beamer@endinputifotherversion {3.07pt}
+\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Approach to solving problem}{9}{0}{2}
+\beamer@sectionintoc {3}{Experiment Design}{13}{0}{3}
+\beamer@sectionintoc {4}{Challenges}{15}{0}{4}
+\beamer@sectionintoc {5}{Related Work}{17}{0}{5}
+\beamer@sectionintoc {6}{Observations}{18}{0}{6}
+\beamer@sectionintoc {7}{Per Home Observation}{19}{0}{7}
+\beamer@sectionintoc {8}{Observations Across homes }{23}{0}{8}
+\beamer@sectionintoc {9}{Controlled Experiment}{30}{0}{9}
+\beamer@sectionintoc {10}{Conclusion}{32}{0}{10}
